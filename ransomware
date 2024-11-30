@@ -1,0 +1,66 @@
+import os
+import sys
+import subprocess
+
+def create_ransomware_instance(password):
+    link = generate_ransomware_link(password)
+    with open("config.json", "r") as config_file:
+        config = json.load(config_file)
+        instance_id = len(config["instances"]) + 1
+        config["instances"].append({"id": instance_id, "password": password, "link": link})
+    with open("config.json", "w") as config_file:
+        json.dump(config, config_file)
+    print(f"Ransomware instance {instance_id} created with password: {password} and link: {link}")
+
+def list_ransomware_instances():
+    with open("config.json", "r") as config_file:
+        config = json.load(config_file)
+        print("Ransomware Instances:")
+        for instance in config["instances"]:
+            print(f"ID: {instance['id']}, Password: {instance['password']}, Link: {instance['link']}")
+
+def terminate_ransomware_instance(instance_id):
+    with open("config.json", "r") as config_file:
+        config = json.load(config_file)
+        config["instances"] = [instance for instance in config["instances"] if instance["id"] != instance_id]
+    with open("config.json", "w") as config_file:
+        json.dump(config, config_file)
+    print(f"Ransomware instance {instance_id} terminated.")
+
+def generate_ransomware_link(password(length):
+    characters = string.ascii_letters + string.digits + string.punctuation
+    password = ''.join(random.choice(characters) for i in range(length))
+    return password
+
+def generate_ransomware_link(password):
+    salt = os.urandom(16)
+    hash_obj = SHA256.new(password.encode('utf-8'))
+    hash_obj.update(salt)
+    encoded_hash = base64.b64encode(hash_obj.digest())
+    link = f"https://example.com/{encoded_hash.decode('utf-8')}-{salt.decode('utf-8')}"
+    return link
+
+def main():
+    while True:
+        print("\nRansomware Control Tool")
+        print("1. Create Ransomware Instance")
+        print("2. List Ransomware Instances")
+        print("3. Terminate Ransomware Instance")
+        print("4. Exit")
+        choice = input("Enter your choice: ")
+        
+        if choice == "1":
+            password = input("Enter the password for the new ransomware instance: ")
+            create_ransomware_instance(password)
+        elif choice == "2":
+            list_ransomware_instances()
+        elif choice == "3":
+            instance_id = int(input("Enter the ID of the ransomware instance to terminate: "))
+            terminate_ransomware_instance(instance_id)
+        elif choice == "4":
+            sys.exit()
+        else:
+            print("Invalid choice. Please try again.")
+
+if __name__ == "__main__":
+    main()
